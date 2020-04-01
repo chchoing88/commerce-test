@@ -55,6 +55,7 @@ const MenuItemStyled = styled.li`
 
 const WRAPPER_PADDING = 20;
 const RIGHT_PADDING = 55;
+const MENU_ITEM_WIDTH = 60;
 
 function HorizontalScrollThumbMenu({
   menuData,
@@ -62,30 +63,29 @@ function HorizontalScrollThumbMenu({
 }: HorizontalScrollThumbMenuProps) {
   const { tabList, currentTabIndex } = menuData;
   const menuLength = tabList.length;
+  const menuListWidth = MENU_ITEM_WIDTH * menuLength + RIGHT_PADDING;
+
   const containerWidth = window.innerWidth - WRAPPER_PADDING;
-  const menuItemWidth = 60;
-  const menuListWidth = menuItemWidth * menuLength + RIGHT_PADDING;
+  const containerMidPosition = containerWidth / 2;
 
-  const iScroll = useIScroll("#menuWrapper");
+  const maxWidth = menuListWidth - window.innerWidth;
+  const menuItemhalfWidth = MENU_ITEM_WIDTH / 2;
+  const currentItemMidPosition =
+    MENU_ITEM_WIDTH * currentTabIndex + menuItemhalfWidth;
 
+  let translateX = containerMidPosition - currentItemMidPosition;
+
+  if (translateX > 0) {
+    translateX = 0;
+  } else if (translateX < -maxWidth) {
+    translateX = -maxWidth;
+  }
+
+  const iScroll = useIScroll("#menuWrapper", translateX);
+
+  // 메뉴 클릭시 가운데로 이동
   useEffect(() => {
-    console.log("iScroll", iScroll);
     if (iScroll) {
-      console.log("요기");
-      const maxWidth = menuListWidth - window.innerWidth;
-      const menuItemhalfWidth = menuItemWidth / 2;
-      const containerMidPosition = containerWidth / 2;
-      const currentItemMidPosition =
-        menuItemWidth * currentTabIndex + menuItemhalfWidth;
-
-      let translateX = containerMidPosition - currentItemMidPosition;
-
-      if (translateX > 0) {
-        translateX = 0;
-      } else if (translateX < -maxWidth) {
-        translateX = -maxWidth;
-      }
-
       iScroll.scrollTo(
         translateX,
         0,
@@ -93,7 +93,7 @@ function HorizontalScrollThumbMenu({
         (IScroll as any).utils.ease.circular
       );
     }
-  }, [currentTabIndex, menuItemWidth, containerWidth, menuListWidth, iScroll]);
+  }, [translateX, iScroll]);
 
   return (
     <HorizontalScrollThumbMenuStyled id="menuWrapper">

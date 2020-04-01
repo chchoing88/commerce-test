@@ -1,14 +1,14 @@
 import { useEffect, useRef } from "react";
 import IScroll from "iscroll";
 
-function useIScroll(id: string) {
+function useIScroll(id: string, startX: number = 0) {
   const iScroll = useRef<IScroll | null>(null);
 
   useEffect(() => {
     iScroll.current = new IScroll(id, {
       scrollX: true,
+      startX,
       scrollY: false,
-      mouseWheel: false,
       disablePointer: true,
       disableTouch: false,
       disableMouse: false,
@@ -20,7 +20,7 @@ function useIScroll(id: string) {
         iScroll.current.destroy();
       }
     };
-  }, [id]);
+  }, [id, startX]);
 
   return iScroll.current;
 }
