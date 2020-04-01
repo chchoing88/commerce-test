@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { useIScroll } from "hooks";
-import IScroll from "iscroll";
 
 import RouteLink from "component/atoms/routeLink/RouteLink";
 import Box from "component/atoms/box/Box";
@@ -11,10 +10,6 @@ import { ITabHook } from "types";
 
 type FixedMenuProps = {
   menuData: ITabHook;
-};
-
-type FixedMenuListStyledProps = {
-  width?: number;
 };
 
 const FixedMenuStyled = styled.div`
@@ -39,7 +34,7 @@ const FixedMenuInnerStyled = styled.div`
   touch-action: none;
 `;
 
-const FixedMenuListStyled = styled.ul<FixedMenuListStyledProps>`
+const FixedMenuListStyled = styled.ul`
   display: table;
   width: auto;
 `;

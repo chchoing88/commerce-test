@@ -2,7 +2,7 @@ import React from "react";
 import styled, { FlattenSimpleInterpolation } from "styled-components";
 
 type BoxProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   css?: FlattenSimpleInterpolation;
 };
 type BoxStyledProps = {

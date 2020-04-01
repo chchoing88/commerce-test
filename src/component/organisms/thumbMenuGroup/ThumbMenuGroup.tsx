@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
+import styled from "styled-components";
+
 import VerticalScrollThumbMenu from "component/organisms/verticalScrollThumbMenu/VerticalScrollThumbMenu";
 import TotalThumbMenu from "component/organisms/totalThumbMenu/TotalThumbMenu";
 
@@ -6,17 +8,31 @@ import { ITabHook } from "types";
 
 type ThumbMenuGroupProps = {
   menuData: ITabHook;
+  menuFold: boolean;
+  onMountedHeight: (height: number) => void;
+  menuToggleButton: () => void;
 };
 
-function ThumbMenuGroup({ menuData }: ThumbMenuGroupProps) {
-  const [menuFold, setMenuFold] = useState(true);
+const ThumbMenuGroupStyled = styled.div`
+  padding-top: 20px;
+`;
 
-  const menuToggleButton = () => {
-    setMenuFold(beforeState => !beforeState);
-  };
+function ThumbMenuGroup({
+  menuData,
+  menuFold,
+  menuToggleButton,
+  onMountedHeight
+}: ThumbMenuGroupProps) {
+  const $elemThumbMenu = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if ($elemThumbMenu.current) {
+      onMountedHeight($elemThumbMenu.current.offsetHeight);
+    }
+  }, [menuFold, onMountedHeight]);
 
   return (
-    <>
+    <ThumbMenuGroupStyled ref={$elemThumbMenu}>
       {menuFold ? (
         <VerticalScrollThumbMenu
           menuData={menuData}
@@ -28,7 +44,7 @@ function ThumbMenuGroup({ menuData }: ThumbMenuGroupProps) {
           onMenuToggle={menuToggleButton}
         ></TotalThumbMenu>
       )}
-    </>
+    </ThumbMenuGroupStyled>
   );
 }
 

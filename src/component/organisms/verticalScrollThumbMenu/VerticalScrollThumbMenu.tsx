@@ -69,7 +69,9 @@ function VerticalScrollThumbMenu({
   const iScroll = useIScroll("#menuWrapper");
 
   useEffect(() => {
+    console.log("iScroll", iScroll);
     if (iScroll) {
+      console.log("요기");
       const maxWidth = menuListWidth - window.innerWidth;
       const menuItemhalfWidth = menuItemWidth / 2;
       const containerMidPosition = containerWidth / 2;

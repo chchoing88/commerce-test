@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import IScroll from "iscroll";
 
 function useIScroll(id: string) {
-  const iScroll = useRef<IScroll>();
+  const iScroll = useRef<IScroll | null>(null);
 
   useEffect(() => {
     iScroll.current = new IScroll(id, {
