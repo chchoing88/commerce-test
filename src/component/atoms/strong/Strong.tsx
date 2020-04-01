@@ -10,6 +10,7 @@ type StrongStyledProps = {
 };
 
 const StrongStyled = styled.strong<StrongStyledProps>`
+  display: inline-block;
   font-size: 14px;
   ${props => (props.css ? props.css : "")}
 `;
