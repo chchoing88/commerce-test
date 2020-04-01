@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import styled, { css } from "styled-components";
-import { useHorizontalScroll } from "hooks";
+import { useIScroll } from "hooks";
+import IScroll from "iscroll";
 
 import ThumbMenuItem from "component/molecules/thumbMenuItem/ThumbMenuItem";
 import RouteLink from "component/atoms/routeLink/RouteLink";
@@ -28,6 +29,7 @@ const VerticalScrollThumbMenuStyled = styled.div`
   overflow: hidden;
   transform: translateZ(0);
   padding: 0 10px;
+  touch-action: none;
   &:after {
     position: absolute;
     pointer-events: none;
@@ -47,8 +49,6 @@ const VerticalScrollThumbMenuStyled = styled.div`
 const MenuListStyled = styled.ul<MenuListStyledProps>`
   overflow: hidden;
   width: ${props => `${props.width}px` || `100%`};
-  transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1);
-  transform: translate(0px, 0px) translateZ(0px);
 `;
 const MenuItemStyled = styled.li<MenuItemStyledProps>`
   float: left;
@@ -56,41 +56,50 @@ const MenuItemStyled = styled.li<MenuItemStyledProps>`
   text-align: center;
 `;
 
+const WRAPPER_PADDING = 20;
+const RIGHT_PADDING = 55;
+const MENU_COUNT = 5;
+
 function VerticalScrollThumbMenu({
   menuData,
   onMenuToggle
 }: VerticalScrollThumbMenuProps) {
   const { tabList, currentTabIndex } = menuData;
   const menuLength = tabList.length;
-  const containerWidth = window.innerWidth - 20;
+  const containerWidth = window.innerWidth - WRAPPER_PADDING;
+  const menuItemWidth = containerWidth * (1 / MENU_COUNT);
+  const menuListWidth = menuItemWidth * menuLength + RIGHT_PADDING;
 
-  const {
-    translateX,
-    menuItemWidth,
-    menuListWidth,
-    duration,
-    onTouchEnd,
-    onTouchMove,
-    onTouchStart,
-    moveToByIndex
-  } = useHorizontalScroll(menuLength, containerWidth, 5, 600);
+  const iScroll = useIScroll("#menuWrapper");
 
   useEffect(() => {
-    moveToByIndex(currentTabIndex);
-  }, [moveToByIndex, currentTabIndex]);
+    if (iScroll) {
+      const maxWidth = menuListWidth - window.innerWidth;
+      const menuItemhalfWidth = menuItemWidth / 2;
+      const containerMidPosition = containerWidth / 2;
+      const currentItemMidPosition =
+        menuItemWidth * currentTabIndex + menuItemhalfWidth;
 
-  const menuListStyle = {
-    transform: `translate(${translateX}px, 0px) translateZ(0px)`,
-    transitionDuration: `${duration}ms`
-  };
+      let translateX = containerMidPosition - currentItemMidPosition;
+
+      if (translateX > 0) {
+        translateX = 0;
+      } else if (translateX < -maxWidth) {
+        translateX = -maxWidth;
+      }
+
+      iScroll.scrollTo(
+        translateX,
+        0,
+        600,
+        (IScroll as any).utils.ease.circular
+      );
+    }
+  }, [currentTabIndex, menuItemWidth, containerWidth, menuListWidth, iScroll]);
 
   return (
-    <VerticalScrollThumbMenuStyled
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-    >
-      <MenuListStyled width={menuListWidth} style={menuListStyle}>
+    <VerticalScrollThumbMenuStyled id="menuWrapper">
+      <MenuListStyled width={menuListWidth}>
         {tabList.map(menu => (
           <MenuItemStyled key={menu.id} width={menuItemWidth}>
             <RouteLink to={menu.id}>

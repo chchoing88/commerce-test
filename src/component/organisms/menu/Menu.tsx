@@ -11,6 +11,7 @@ type MenuProps = {
 function Menu({ menuData, location }: MenuProps) {
   const { onHandleTabActive } = menuData;
   const pathName = location.pathname.substring(1);
+
   useEffect(() => {
     onHandleTabActive(pathName);
   }, [pathName, onHandleTabActive]);

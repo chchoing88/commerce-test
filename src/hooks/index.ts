@@ -1,3 +1,3 @@
-import useHorizontalScroll from "./useHorizontalScroll";
 import useTab from "./useTab";
-export { useHorizontalScroll, useTab };
+import useIScroll from "./useIScroll";
+export { useTab, useIScroll };

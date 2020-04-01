@@ -1,5 +1,4 @@
 import { useState, useMemo, useCallback } from "react";
-// import {MenuItem} from 'constant'
 import { IMenuItem, ITabHook } from "types";
 
 const MENU_LIST: IMenuItem[] = [
@@ -69,7 +68,7 @@ function useTab(): ITabHook {
   // 탭 눌렀을때
   const onHandleTabActive = useCallback(
     (tabId: string) => {
-      if (currentTabData && currentTabData.id !== tabId) {
+      if (tabId && currentTabData && currentTabData.id !== tabId) {
         setTabList(beforeTabList => {
           return beforeTabList.map(tabItem => {
             tabItem.isActive = tabItem.id === tabId;
