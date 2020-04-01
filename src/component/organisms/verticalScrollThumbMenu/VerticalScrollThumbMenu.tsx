@@ -20,10 +20,6 @@ type MenuListStyledProps = {
   width?: number;
 };
 
-type MenuItemStyledProps = {
-  width?: number;
-};
-
 const VerticalScrollThumbMenuStyled = styled.div`
   position: relative;
   overflow: hidden;
@@ -49,16 +45,16 @@ const VerticalScrollThumbMenuStyled = styled.div`
 const MenuListStyled = styled.ul<MenuListStyledProps>`
   overflow: hidden;
   width: ${props => `${props.width}px` || `100%`};
+  margin: 0 -5px;
 `;
-const MenuItemStyled = styled.li<MenuItemStyledProps>`
+const MenuItemStyled = styled.li`
   float: left;
-  width: ${props => `${props.width}px` || `20%`};
+  width: 60px;
   text-align: center;
 `;
 
 const WRAPPER_PADDING = 20;
 const RIGHT_PADDING = 55;
-const MENU_COUNT = 5;
 
 function VerticalScrollThumbMenu({
   menuData,
@@ -67,7 +63,7 @@ function VerticalScrollThumbMenu({
   const { tabList, currentTabIndex } = menuData;
   const menuLength = tabList.length;
   const containerWidth = window.innerWidth - WRAPPER_PADDING;
-  const menuItemWidth = containerWidth * (1 / MENU_COUNT);
+  const menuItemWidth = 60;
   const menuListWidth = menuItemWidth * menuLength + RIGHT_PADDING;
 
   const iScroll = useIScroll("#menuWrapper");
@@ -101,8 +97,13 @@ function VerticalScrollThumbMenu({
     <VerticalScrollThumbMenuStyled id="menuWrapper">
       <MenuListStyled width={menuListWidth}>
         {tabList.map(menu => (
-          <MenuItemStyled key={menu.id} width={menuItemWidth}>
-            <RouteLink to={menu.id}>
+          <MenuItemStyled key={menu.id}>
+            <RouteLink
+              to={menu.id}
+              css={css`
+                padding: 0 5px;
+              `}
+            >
               <ThumbMenuItem menu={menu}></ThumbMenuItem>
             </RouteLink>
           </MenuItemStyled>

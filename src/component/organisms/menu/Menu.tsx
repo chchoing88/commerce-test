@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import ThumbMenuGroup from "component/organisms/thumbMenuGroup/ThumbMenuGroup";
+import FixedMenu from "component/organisms/fixedMenu/FixedMenu";
 
 import { ITabHook } from "types";
 
@@ -19,6 +20,7 @@ function Menu({ menuData, location }: MenuProps) {
   return (
     <>
       <ThumbMenuGroup menuData={menuData}></ThumbMenuGroup>
+      <FixedMenu menuData={menuData}></FixedMenu>
     </>
   );
 }

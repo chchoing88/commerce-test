@@ -6,14 +6,12 @@ function useIScroll(id: string) {
 
   useEffect(() => {
     iScroll.current = new IScroll(id, {
-      snap: "li",
       scrollX: true,
       scrollY: false,
       mouseWheel: false,
       disablePointer: true,
       disableTouch: false,
       disableMouse: false,
-      eventPassthrough: "vertical",
       preventDefault: false
     });
 

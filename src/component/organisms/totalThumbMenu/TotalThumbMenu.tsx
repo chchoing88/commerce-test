@@ -26,8 +26,6 @@ const TotalThumbMenuStyled = styled.div`
 const MenuListStyled = styled.ul`
   overflow: hidden;
   width: 100%;
-  transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1);
-  transform: translate(0px, 0px) translateZ(0px);
 `;
 const MenuItemStyled = styled.li`
   float: left;
