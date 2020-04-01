@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { withRouter, RouteComponentProps } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { useHorizontalScroll } from "hooks";
 
@@ -14,7 +13,7 @@ import { ITabHook } from "types";
 type VerticalScrollThumbMenuProps = {
   menuData: ITabHook;
   onMenuToggle: () => void;
-} & RouteComponentProps;
+};
 
 type MenuListStyledProps = {
   width?: number;
@@ -59,11 +58,8 @@ const MenuItemStyled = styled.li<MenuItemStyledProps>`
 
 function VerticalScrollThumbMenu({
   menuData,
-  onMenuToggle,
-  location
+  onMenuToggle
 }: VerticalScrollThumbMenuProps) {
-  // console.log("location", location.pathname);
-  // const pathName = location.pathname.substring(1);
   const { tabList, currentTabIndex } = menuData;
   const menuLength = tabList.length;
   const containerWidth = window.innerWidth - 20;
@@ -95,15 +91,9 @@ function VerticalScrollThumbMenu({
       onTouchEnd={onTouchEnd}
     >
       <MenuListStyled width={menuListWidth} style={menuListStyle}>
-        {tabList.map((menu, index) => (
+        {tabList.map(menu => (
           <MenuItemStyled key={menu.id} width={menuItemWidth}>
-            <RouteLink
-              to={menu.id}
-              // onClick={() => {
-              //   moveToByIndex(index);
-              //   onHandleTabClick(menu.id);
-              // }}
-            >
+            <RouteLink to={menu.id}>
               <ThumbMenuItem menu={menu}></ThumbMenuItem>
             </RouteLink>
           </MenuItemStyled>
@@ -126,4 +116,4 @@ function VerticalScrollThumbMenu({
   );
 }
 
-export default withRouter(VerticalScrollThumbMenu);
+export default VerticalScrollThumbMenu;
