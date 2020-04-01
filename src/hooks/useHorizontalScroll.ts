@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 const SLOW = 0.25;
 const MIN_POSITION = 0;
@@ -15,12 +15,22 @@ function useHorizontalScroll(
   const [duration, setDuration] = useState(0);
   const beforeTranslateX = useRef<number>(0);
   const resultTranslateX = useRef<number>(0);
+  const timeId = useRef<number>(0);
 
   const menuItemWidth = containerWidth * (1 / menuCount);
   const menuListWidth = menuItemWidth * menuLength;
   const maxWidth = containerWidth - menuListWidth - RIGHT_PADDING;
   const containerMidPosition = Math.floor(containerWidth / 2);
   const menuItemhalfWidth = Math.floor(menuItemWidth / 2);
+
+  const initDuration = useCallback(() => {
+    if (timeId.current) {
+      clearTimeout(timeId.current);
+    }
+    timeId.current = setTimeout(() => {
+      setDuration(0);
+    }, scrollDuration + TIMEOUT);
+  }, [setDuration, timeId, scrollDuration]);
 
   const onTouchStart = (e: React.TouchEvent) => {
     // console.log("onTouchStart", e.changedTouches);
@@ -54,28 +64,44 @@ function useHorizontalScroll(
     setTranslateX(resultTranslateX.current);
     beforeTranslateX.current = MIN_POSITION;
 
-    setTimeout(() => {
-      setDuration(0);
-    }, scrollDuration + TIMEOUT);
+    initDuration();
   };
 
-  const moveToByIndex = (index: number) => {
-    const currentItemMidPosition = menuItemWidth * index + menuItemhalfWidth;
-    let tempTranslateX = containerMidPosition - currentItemMidPosition;
+  const moveToByIndex = useCallback(
+    (index: number) => {
+      const currentItemMidPosition = menuItemWidth * index + menuItemhalfWidth;
+      let tempTranslateX = containerMidPosition - currentItemMidPosition;
 
-    if (tempTranslateX > 0) {
-      tempTranslateX = 0;
-    } else if (tempTranslateX < maxWidth) {
-      tempTranslateX = maxWidth;
-    }
-    resultTranslateX.current = tempTranslateX;
-    setTranslateX(resultTranslateX.current);
-    setDuration(scrollDuration);
+      if (tempTranslateX > 0) {
+        tempTranslateX = 0;
+      } else if (tempTranslateX < maxWidth) {
+        tempTranslateX = maxWidth;
+      }
+      resultTranslateX.current = tempTranslateX;
+      setTranslateX(resultTranslateX.current);
+      setDuration(scrollDuration);
+      initDuration();
+    },
+    [
+      resultTranslateX,
+      setTranslateX,
+      setDuration,
+      initDuration,
+      containerMidPosition,
+      maxWidth,
+      menuItemWidth,
+      menuItemhalfWidth,
+      scrollDuration
+    ]
+  );
 
-    setTimeout(() => {
-      setDuration(0);
-    }, scrollDuration + TIMEOUT);
-  };
+  useEffect(() => {
+    return () => {
+      if (timeId.current) {
+        clearTimeout(timeId.current);
+      }
+    };
+  }, []);
 
   return {
     translateX,
