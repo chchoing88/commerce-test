@@ -16,8 +16,6 @@ const EllipsisStyled = styled.div<EllipsisStyledProps>`
   display: -webkit-box;
   -webkit-line-clamp: 2; /* ellipsis line */
   -webkit-box-orient: vertical;
-  line-height: 1.2em;
-  height: 2.4em;
   ${props => (props.css ? props.css : "")}
 `;
 

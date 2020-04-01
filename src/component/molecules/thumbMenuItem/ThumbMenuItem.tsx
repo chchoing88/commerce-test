@@ -26,7 +26,7 @@ function ThumbMenuItem({ menu }: ThumbMenuItemProps) {
           height: 50px;
         `}
       >
-        <Image src="https://via.placeholder.com/150"></Image>
+        <Image src="https://via.placeholder.com/150" alt={menu.name}></Image>
       </RoundMask>
       <Text
         css={css`

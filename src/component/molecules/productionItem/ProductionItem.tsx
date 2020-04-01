@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { css, FlattenSimpleInterpolation } from "styled-components";
+import { css, FlattenSimpleInterpolation } from "styled-components";
 
 import Box from "component/atoms/box/Box";
 import Image from "component/atoms/image/Image";
@@ -15,7 +15,12 @@ type ProductionItemProps = {
 function ProductionItem({ oCss }: ProductionItemProps) {
   return (
     <Box css={oCss}>
-      <RouteLink to="/">
+      <RouteLink
+        to="/"
+        css={css`
+          display: block;
+        `}
+      >
         <Box
           css={css`
             position: relative;
@@ -25,6 +30,7 @@ function ProductionItem({ oCss }: ProductionItemProps) {
         >
           <Image
             src="https://via.placeholder.com/150"
+            alt="상품명상품명상품명상품명상품명abcdefghijklmn123456789"
             css={css`
               position: absolute;
               top: 0;
@@ -33,23 +39,41 @@ function ProductionItem({ oCss }: ProductionItemProps) {
             `}
           ></Image>
         </Box>
-        <Strong
+        <Box
           css={css`
             padding: 0 10px;
             margin-top: 10px;
           `}
         >
-          <Ellipsis>
-            Page 2: 브랜드명
+          <Strong>
+            <Ellipsis>
+              Page 2: 브랜드명{" "}
+              <Text
+                css={css`
+                  font-weight: normal;
+                `}
+              >
+                상품명상품명상품명상품명상품명abcdefghijklmn123456789
+              </Text>
+            </Ellipsis>
+          </Strong>
+          <Text
+            css={css`
+              font-size: 18px;
+              font-weight: bold;
+            `}
+          >
+            17,900
             <Text
               css={css`
+                font-size: 14px;
                 font-weight: normal;
               `}
             >
-              상품명상품명상품명상품명상품명abcdefg1234
+              원
             </Text>
-          </Ellipsis>
-        </Strong>
+          </Text>
+        </Box>
       </RouteLink>
     </Box>
   );
