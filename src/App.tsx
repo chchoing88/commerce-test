@@ -10,6 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <Menu menuData={tabData}></Menu>
+      <Route path="/" render={() => <Redirect to="/dress" />} exact />
     </BrowserRouter>
   );
 }

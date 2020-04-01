@@ -58,15 +58,18 @@ const MENU_LIST: IMenuItem[] = [
 function useTab(): ITabHook {
   const [tabList, setTabList] = useState(MENU_LIST);
 
-  const currentTabData = useMemo(() => {
-    const activeIndex = tabList.findIndex(tabData => tabData.isActive);
-    return tabList[activeIndex];
+  const currentTabIndex = useMemo(() => {
+    return tabList.findIndex(tabData => tabData.isActive);
   }, [tabList]);
 
+  const currentTabData = useMemo(() => {
+    return tabList[currentTabIndex];
+  }, [currentTabIndex, tabList]);
+
   // 탭 눌렀을때
-  const onHandleTabClick = useCallback(
+  const onHandleTabActive = useCallback(
     (tabId: string) => {
-      if (currentTabData.id !== tabId) {
+      if (currentTabData && currentTabData.id !== tabId) {
         setTabList(beforeTabList => {
           return beforeTabList.map(tabItem => {
             tabItem.isActive = tabItem.id === tabId;
@@ -80,8 +83,9 @@ function useTab(): ITabHook {
 
   return {
     tabList,
+    currentTabIndex,
     currentTabData,
-    onHandleTabClick
+    onHandleTabActive
   };
 }
 

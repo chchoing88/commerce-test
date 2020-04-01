@@ -37,7 +37,7 @@ const MenuItemStyled = styled.li`
 `;
 
 function TotalThumbMenu({ menuData, onMenuToggle }: TotalThumbMenuProps) {
-  const { tabList, onHandleTabClick } = menuData;
+  const { tabList } = menuData;
   return (
     <TotalThumbMenuStyled>
       <Box
@@ -70,10 +70,7 @@ function TotalThumbMenu({ menuData, onMenuToggle }: TotalThumbMenuProps) {
       <MenuListStyled>
         {tabList.map(menu => (
           <MenuItemStyled key={menu.id}>
-            <RouteLink
-              to={menu.id === "dress" ? "/" : menu.id}
-              onClick={() => onHandleTabClick(menu.id)}
-            >
+            <RouteLink to={menu.id}>
               <ThumbMenuItem menu={menu}></ThumbMenuItem>
             </RouteLink>
           </MenuItemStyled>

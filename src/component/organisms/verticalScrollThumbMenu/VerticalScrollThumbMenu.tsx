@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { useHorizontalScroll } from "hooks";
 
@@ -13,7 +14,7 @@ import { ITabHook } from "types";
 type VerticalScrollThumbMenuProps = {
   menuData: ITabHook;
   onMenuToggle: () => void;
-};
+} & RouteComponentProps;
 
 type MenuListStyledProps = {
   width?: number;
@@ -58,9 +59,12 @@ const MenuItemStyled = styled.li<MenuItemStyledProps>`
 
 function VerticalScrollThumbMenu({
   menuData,
-  onMenuToggle
+  onMenuToggle,
+  location
 }: VerticalScrollThumbMenuProps) {
-  const { tabList, onHandleTabClick } = menuData;
+  // console.log("location", location.pathname);
+  // const pathName = location.pathname.substring(1);
+  const { tabList, currentTabIndex } = menuData;
   const menuLength = tabList.length;
   const containerWidth = window.innerWidth - 20;
 
@@ -74,6 +78,10 @@ function VerticalScrollThumbMenu({
     onTouchStart,
     moveToByIndex
   } = useHorizontalScroll(menuLength, containerWidth, 5, 600);
+
+  useEffect(() => {
+    moveToByIndex(currentTabIndex);
+  }, [moveToByIndex, currentTabIndex]);
 
   const menuListStyle = {
     transform: `translate(${translateX}px, 0px) translateZ(0px)`,
@@ -90,11 +98,11 @@ function VerticalScrollThumbMenu({
         {tabList.map((menu, index) => (
           <MenuItemStyled key={menu.id} width={menuItemWidth}>
             <RouteLink
-              to={menu.id === "dress" ? "/" : menu.id}
-              onClick={() => {
-                moveToByIndex(index);
-                onHandleTabClick(menu.id);
-              }}
+              to={menu.id}
+              // onClick={() => {
+              //   moveToByIndex(index);
+              //   onHandleTabClick(menu.id);
+              // }}
             >
               <ThumbMenuItem menu={menu}></ThumbMenuItem>
             </RouteLink>
@@ -118,4 +126,4 @@ function VerticalScrollThumbMenu({
   );
 }
 
-export default VerticalScrollThumbMenu;
+export default withRouter(VerticalScrollThumbMenu);

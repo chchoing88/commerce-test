@@ -6,6 +6,7 @@ export interface IMenuItem {
 
 export interface ITabHook {
   tabList: IMenuItem[];
+  currentTabIndex: number;
   currentTabData: IMenuItem;
-  onHandleTabClick: (tabId: string) => void;
+  onHandleTabActive: (tabId: string) => void;
 }
