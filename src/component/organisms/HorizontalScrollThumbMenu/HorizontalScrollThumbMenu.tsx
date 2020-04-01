@@ -11,7 +11,7 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 import { ITabHook } from "types";
 
-type VerticalScrollThumbMenuProps = {
+type HorizontalScrollThumbMenuProps = {
   menuData: ITabHook;
   onMenuToggle: () => void;
 };
@@ -20,7 +20,7 @@ type MenuListStyledProps = {
   width?: number;
 };
 
-const VerticalScrollThumbMenuStyled = styled.div`
+const HorizontalScrollThumbMenuStyled = styled.div`
   position: relative;
   overflow: hidden;
   transform: translateZ(0);
@@ -56,10 +56,10 @@ const MenuItemStyled = styled.li`
 const WRAPPER_PADDING = 20;
 const RIGHT_PADDING = 55;
 
-function VerticalScrollThumbMenu({
+function HorizontalScrollThumbMenu({
   menuData,
   onMenuToggle
-}: VerticalScrollThumbMenuProps) {
+}: HorizontalScrollThumbMenuProps) {
   const { tabList, currentTabIndex } = menuData;
   const menuLength = tabList.length;
   const containerWidth = window.innerWidth - WRAPPER_PADDING;
@@ -96,7 +96,7 @@ function VerticalScrollThumbMenu({
   }, [currentTabIndex, menuItemWidth, containerWidth, menuListWidth, iScroll]);
 
   return (
-    <VerticalScrollThumbMenuStyled id="menuWrapper">
+    <HorizontalScrollThumbMenuStyled id="menuWrapper">
       <MenuListStyled width={menuListWidth}>
         {tabList.map(menu => (
           <MenuItemStyled key={menu.id}>
@@ -124,8 +124,8 @@ function VerticalScrollThumbMenu({
       >
         <FontAwesomeIcon icon={faChevronDown}></FontAwesomeIcon>
       </Button>
-    </VerticalScrollThumbMenuStyled>
+    </HorizontalScrollThumbMenuStyled>
   );
 }
 
-export default VerticalScrollThumbMenu;
+export default HorizontalScrollThumbMenu;

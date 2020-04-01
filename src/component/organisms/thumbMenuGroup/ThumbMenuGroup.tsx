@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
-import VerticalScrollThumbMenu from "component/organisms/verticalScrollThumbMenu/VerticalScrollThumbMenu";
+import HorizontalScrollThumbMenu from "component/organisms/HorizontalScrollThumbMenu/HorizontalScrollThumbMenu";
 import TotalThumbMenu from "component/organisms/totalThumbMenu/TotalThumbMenu";
 
 import { ITabHook } from "types";
@@ -34,10 +34,10 @@ function ThumbMenuGroup({
   return (
     <ThumbMenuGroupStyled ref={$elemThumbMenu}>
       {menuFold ? (
-        <VerticalScrollThumbMenu
+        <HorizontalScrollThumbMenu
           menuData={menuData}
           onMenuToggle={menuToggleButton}
-        ></VerticalScrollThumbMenu>
+        ></HorizontalScrollThumbMenu>
       ) : (
         <TotalThumbMenu
           menuData={menuData}
