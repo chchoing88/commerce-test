@@ -10,9 +10,14 @@ import RouteLink from "component/atoms/routeLink/RouteLink";
 
 type ProductionItemProps = {
   oCss?: FlattenSimpleInterpolation;
+} & typeof defaultProps;
+
+const defaultProps = {
+  title: `상품명상품명상품명상품명상품명abcdefghijklmn123456789`,
+  price: "17,900"
 };
 
-function ProductionItem({ oCss }: ProductionItemProps) {
+function ProductionItem({ oCss, title, price }: ProductionItemProps) {
   return (
     <Box css={oCss}>
       <RouteLink
@@ -30,7 +35,7 @@ function ProductionItem({ oCss }: ProductionItemProps) {
         >
           <Image
             src="https://via.placeholder.com/150"
-            alt="상품명상품명상품명상품명상품명abcdefghijklmn123456789"
+            alt={title}
             css={css`
               position: absolute;
               top: 0;
@@ -47,13 +52,13 @@ function ProductionItem({ oCss }: ProductionItemProps) {
         >
           <Strong>
             <Ellipsis>
-              Page 2: 브랜드명{" "}
+              Page 1: 브랜드명{" "}
               <Text
                 css={css`
                   font-weight: normal;
                 `}
               >
-                상품명상품명상품명상품명상품명abcdefghijklmn123456789
+                {title}
               </Text>
             </Ellipsis>
           </Strong>
@@ -63,7 +68,7 @@ function ProductionItem({ oCss }: ProductionItemProps) {
               font-weight: bold;
             `}
           >
-            17,900
+            {price}
             <Text
               css={css`
                 font-size: 14px;
@@ -78,5 +83,7 @@ function ProductionItem({ oCss }: ProductionItemProps) {
     </Box>
   );
 }
+
+ProductionItem.defaultProps = defaultProps;
 
 export default ProductionItem;

@@ -1,10 +1,13 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import ProductionItem from "component/molecules/productionItem/ProductionItem";
+import NoProduction from "component/molecules/noProduction/NoProduction";
+
+import { IFakeResponseItem } from "types/api";
 
 type ProductionListProps = {
-  pList: number[];
+  pList: IFakeResponseItem[] | null;
 };
 
 const ProductionListStyled = styled.ul`
@@ -24,11 +27,22 @@ const ProductionItemStyled = styled.li`
 function ProductionList({ pList }: ProductionListProps) {
   return (
     <ProductionListStyled>
-      {pList.map(item => (
-        <ProductionItemStyled>
-          <ProductionItem></ProductionItem>
-        </ProductionItemStyled>
-      ))}
+      {pList ? (
+        pList.length > 0 ? (
+          pList.map(item => (
+            <ProductionItemStyled key={item.ID}>
+              <ProductionItem></ProductionItem>
+            </ProductionItemStyled>
+          ))
+        ) : (
+          <NoProduction
+            oCss={css`
+              padding-top: 80px;
+              text-align: center;
+            `}
+          ></NoProduction>
+        )
+      ) : null}
     </ProductionListStyled>
   );
 }

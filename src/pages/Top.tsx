@@ -7,7 +7,7 @@ import Box from "component/atoms/box/Box";
 import ProductionList from "component/organisms/productionList/ProductionList";
 import LoadingBoundary from "component/molecules/loadingBoundary/LoadingBoundary";
 
-function Dress() {
+function Top() {
   const { isLoading, pList } = useInfinityApiCall(fakeApi.fetch);
 
   return (
@@ -23,4 +23,4 @@ function Dress() {
   );
 }
 
-export default Dress;
+export default Top;
