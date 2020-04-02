@@ -8,11 +8,11 @@ import Top from "pages/Top";
 import Outer from "pages/Outer";
 import Bottom from "pages/Bottom";
 import Shoes from "pages/Shoes";
-// import Bags from "pages/Bags";
-// import Accessories from "pages/Accessories";
-// import Jewelry from "pages/Jewelry";
-// import Etc from "pages/Etc";
-// import Man from "pages/Man";
+import Bags from "pages/Bags";
+import Accessories from "pages/Accessories";
+import Jewelry from "pages/Jewelry";
+import Etc from "pages/Etc";
+import Man from "pages/Man";
 
 function Root() {
   return (
@@ -24,6 +24,11 @@ function Root() {
         <Route path="/outer" component={Outer}></Route>
         <Route path="/bottom" component={Bottom}></Route>
         <Route path="/shoes" component={Shoes}></Route>
+        <Route path="/bags" component={Bags}></Route>
+        <Route path="/accessories" component={Accessories}></Route>
+        <Route path="/jewelry" component={Jewelry}></Route>
+        <Route path="/etc" component={Etc}></Route>
+        <Route path="/man" component={Man}></Route>
       </Switch>
       <Route path="/" render={() => <Redirect to="/dress" />} exact />
     </>

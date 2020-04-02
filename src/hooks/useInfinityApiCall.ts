@@ -110,7 +110,7 @@ function useInfinityApiCall({
 
     // unmount 되면서 렌더, dispatch 되면서 렌더.. 2번 렌더..
     return () => {
-      console.log(`unmount ${pageName}`);
+      // console.log(`unmount ${pageName}`);
       source.cancel();
       window.removeEventListener("scroll", infiniteScroll);
       historyStore.pushHistory({
