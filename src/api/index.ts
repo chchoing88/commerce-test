@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { IInfinityApiFetchProps } from "types/api";
 
-const DOMAIN = `http://fakerestapi.azurewebsites.net`;
+const DOMAIN = `//fakerestapi.azurewebsites.net`;
 
 const request = ({ method, url, data, cancelToken }: AxiosRequestConfig) => {
   return axios({
