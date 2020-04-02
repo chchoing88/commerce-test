@@ -14,7 +14,7 @@ export function scrollMoveTo(
   const currenttMidWidth = $elemCurrentMenu.offsetWidth / 2;
   const currentLeftOffset = $elemCurrentMenu.offsetLeft;
   const maxWidth = $elemMenuWrapperWidth - wrapperWidth;
-  console.log(maxWidth);
+
   let startX =
     wrapperLeftOffset - currentLeftOffset + wrapperMidPos - currenttMidWidth;
 

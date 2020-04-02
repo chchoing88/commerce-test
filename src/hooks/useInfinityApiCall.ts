@@ -12,6 +12,7 @@ type useInfinityApiCallProps = {
 
 const MAX_ITEMS_COUNT = 200;
 const ONE_TIME_COUNT = 30;
+const BOTTOM_PADDING = 150;
 
 const loadData = async (
   apiFetch: InfinityFetch,
@@ -55,6 +56,7 @@ function useInfinityApiCall({
   const [pList, setPList] = useState<IFakeResponseItem[] | null>(null);
   const preItemsCount = useRef(0);
   const itemsCount = useRef(30);
+  const requestIng = useRef(false);
 
   if (historyStore.currentHistory) {
     itemsCount.current = historyStore.currentHistory.preItemsCount;
@@ -72,16 +74,36 @@ function useInfinityApiCall({
     );
     const clientHeight = document.documentElement.clientHeight;
 
-    if (scrollTop + clientHeight === scrollHeight) {
-      preItemsCount.current = itemsCount.current;
-      itemsCount.current =
-        itemsCount.current + ONE_TIME_COUNT > MAX_ITEMS_COUNT
-          ? MAX_ITEMS_COUNT
-          : itemsCount.current + ONE_TIME_COUNT;
+    // console.log("scrollHeight - BOTTOM_PADDING", scrollHeight - BOTTOM_PADDING);
+    // console.log("scrollTop + clientHeight", scrollTop + clientHeight);
+    if (!requestIng.current) {
+      if (scrollTop + clientHeight >= scrollHeight - BOTTOM_PADDING) {
+        preItemsCount.current = itemsCount.current;
+        itemsCount.current =
+          itemsCount.current + ONE_TIME_COUNT > MAX_ITEMS_COUNT
+            ? MAX_ITEMS_COUNT
+            : itemsCount.current + ONE_TIME_COUNT;
 
-      // console.log("여기", preItemsCount.current);
-      if (preItemsCount.current < MAX_ITEMS_COUNT && !isEmptyArray) {
-        loadData(apiFetch, preItemsCount.current, itemsCount.current, setPList);
+        // console.log("여기", requestIng.current);
+        // console.log("preItemsCount.current", preItemsCount.current);
+
+        if (preItemsCount.current < MAX_ITEMS_COUNT && !isEmptyArray) {
+          requestIng.current = true;
+          loadData(
+            apiFetch,
+            preItemsCount.current,
+            itemsCount.current,
+            setPList
+          )
+            .then(isApiCall => {
+              if (isApiCall) {
+                requestIng.current = false;
+              }
+            })
+            .catch(e => {
+              throw new Error("인피니티 스크롤 loadData 네트워크 오류 입니다.");
+            });
+        }
       }
     }
   }, [apiFetch, isEmptyArray]);
@@ -111,7 +133,7 @@ function useInfinityApiCall({
         }
       })
       .catch(e => {
-        throw new Error("loadData 네트워크 오류 입니다.");
+        throw new Error("초기 loadData 네트워크 오류 입니다.");
       });
 
     window.addEventListener("scroll", infiniteScroll);

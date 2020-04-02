@@ -12,7 +12,7 @@ function useIScroll(
   useEffect(() => {
     if (!iScroll.current) {
       // wrapper width
-      console.dir(ref.current);
+      // console.dir(ref.current);
 
       if (ref.current) {
         const wrapperElement = ref.current;
