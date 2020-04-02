@@ -1,19 +1,17 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { css } from "styled-components";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { useFixHeader } from "hooks";
+import { useTab, useFixHeader } from "hooks";
 
 import ThumbMenuGroup from "component/organisms/thumbMenuGroup/ThumbMenuGroup";
 import FixedMenu from "component/organisms/fixedMenu/FixedMenu";
 import Box from "component/atoms/box/Box";
 
-import { ITabHook } from "types";
+type MenuProps = {} & RouteComponentProps;
 
-type MenuProps = {
-  menuData: ITabHook;
-} & RouteComponentProps;
+function Menu({ location }: MenuProps) {
+  const tabData = useTab();
 
-function Menu({ menuData, location }: MenuProps) {
   // 메뉴 접었다 펼치기
   const [menuFold, setMenuFold] = useState(true);
   const menuToggleButton = useCallback(() => {
@@ -21,7 +19,7 @@ function Menu({ menuData, location }: MenuProps) {
   }, []);
 
   // 메뉴 활성화
-  const { onHandleTabActive } = menuData;
+  const { onHandleTabActive } = tabData;
   const pathName = location.pathname.substring(1);
   useEffect(() => {
     onHandleTabActive(pathName);
@@ -39,7 +37,7 @@ function Menu({ menuData, location }: MenuProps) {
 
   return isHeaderFix ? (
     <>
-      <FixedMenu menuData={menuData}></FixedMenu>
+      <FixedMenu menuData={tabData}></FixedMenu>
       <Box
         css={css`
           padding-top: ${boundaryPosition}px;
@@ -48,7 +46,7 @@ function Menu({ menuData, location }: MenuProps) {
     </>
   ) : (
     <ThumbMenuGroup
-      menuData={menuData}
+      menuData={tabData}
       menuFold={menuFold}
       menuToggleButton={menuToggleButton}
       onMountedHeight={onMountedHeight}
