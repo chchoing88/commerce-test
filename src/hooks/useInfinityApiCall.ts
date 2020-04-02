@@ -27,8 +27,8 @@ const loadData = async (
       preItemsCount: preItemsCount,
       itemsCount: itemsCount
     });
-    // return response;
-    console.log("response", response);
+
+    // console.log("response", response);
     setPList(beforePList => {
       if (!beforePList) {
         beforePList = [];
@@ -47,9 +47,8 @@ function useInfinityApiCall({
   pageName,
   isEmptyArray = false
 }: useInfinityApiCallProps) {
-  // const historyDispatch = useHistoryDispatch();
   const historyStore = useHistoryStore();
-  console.log("historyStore", historyStore.historyList);
+  // console.log("historyStore", historyStore.historyList);
 
   const [isLoading, setLoading] = useState(false);
   const [pList, setPList] = useState<IFakeResponseItem[] | null>(null);
