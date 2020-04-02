@@ -1,26 +1,43 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import IScroll from "iscroll";
+import { scrollMoveTo } from "utils";
 
-function useIScroll(id: string, startX: number = 0) {
+// function useIScroll(id: string, startX: number = 0) {
+function useIScroll(
+  ref: React.RefObject<HTMLDivElement>,
+  currentIndex: number
+) {
   const iScroll = useRef<IScroll | null>(null);
 
   useEffect(() => {
-    iScroll.current = new IScroll(id, {
-      scrollX: true,
-      startX,
-      scrollY: false,
-      disablePointer: true,
-      disableTouch: false,
-      disableMouse: false,
-      preventDefault: false
-    });
+    if (!iScroll.current) {
+      // wrapper width
+      console.dir(ref.current);
+
+      if (ref.current) {
+        const wrapperElement = ref.current;
+        const wrapperId = wrapperElement.id;
+
+        const startX = scrollMoveTo(wrapperElement, currentIndex);
+
+        iScroll.current = new IScroll(`#${wrapperId}`, {
+          scrollX: true,
+          startX,
+          scrollY: false,
+          disablePointer: true,
+          disableTouch: false,
+          disableMouse: false,
+          preventDefault: false
+        });
+      }
+    }
 
     return () => {
       if (iScroll.current) {
         iScroll.current.destroy();
       }
     };
-  }, [id, startX]);
+  }, [ref, currentIndex]);
 
   return iScroll.current;
 }

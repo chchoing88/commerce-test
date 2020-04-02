@@ -24,7 +24,7 @@ export const fakeApi = {
       })
       .catch(error => {
         if (axios.isCancel(error)) {
-          console.log("취소");
+          return console.log("취소");
         }
         throw new Error("네트워크 에러 입니다.");
       });

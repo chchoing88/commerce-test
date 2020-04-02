@@ -54,8 +54,16 @@ const MENU_LIST: IMenuItem[] = [
   }
 ];
 
-function useTab(): ITabHook {
-  const [tabList, setTabList] = useState(MENU_LIST);
+function useTab(pathName: string): ITabHook {
+  const initMenuList = MENU_LIST.map(menuItem => {
+    if (menuItem.id === pathName) {
+      menuItem.isActive = true;
+    } else {
+      menuItem.isActive = false;
+    }
+    return menuItem;
+  });
+  const [tabList, setTabList] = useState(initMenuList);
 
   const currentTabIndex = useMemo(() => {
     return tabList.findIndex(tabData => tabData.isActive);

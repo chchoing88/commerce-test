@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
 import { useIScroll } from "hooks";
 import IScroll from "iscroll";
+import { scrollMoveTo } from "utils";
 
 import ThumbMenuItem from "component/molecules/thumbMenuItem/ThumbMenuItem";
 import RouteLink from "component/atoms/routeLink/RouteLink";
@@ -42,6 +43,8 @@ const HorizontalScrollThumbMenuStyled = styled.div`
   }
 `;
 
+const HorizontalScrollThumbMenuInnerStyled = styled.div``;
+
 const MenuListStyled = styled.ul<MenuListStyledProps>`
   overflow: hidden;
   width: ${props => `${props.width}px` || `100%`};
@@ -53,77 +56,65 @@ const MenuItemStyled = styled.li`
   text-align: center;
 `;
 
-const WRAPPER_PADDING = 20;
-const RIGHT_PADDING = 55;
+const RIGHT_PADDING = 54;
 const MENU_ITEM_WIDTH = 60;
 
 function HorizontalScrollThumbMenu({
   menuData,
   onMenuToggle
 }: HorizontalScrollThumbMenuProps) {
+  const $elemMenuScrollWrapper = useRef<HTMLDivElement>(null);
   const { tabList, currentTabIndex } = menuData;
   const menuLength = tabList.length;
   const menuListWidth = MENU_ITEM_WIDTH * menuLength + RIGHT_PADDING;
 
-  const containerWidth = window.innerWidth - WRAPPER_PADDING;
-  const containerMidPosition = containerWidth / 2;
-
-  const maxWidth = menuListWidth - window.innerWidth;
-  const menuItemhalfWidth = MENU_ITEM_WIDTH / 2;
-  const currentItemMidPosition =
-    MENU_ITEM_WIDTH * currentTabIndex + menuItemhalfWidth;
-
-  let translateX = containerMidPosition - currentItemMidPosition;
-
-  if (translateX > 0) {
-    translateX = 0;
-  } else if (translateX < -maxWidth) {
-    translateX = -maxWidth;
-  }
-
-  const iScroll = useIScroll("#menuWrapper", translateX);
+  const iScroll = useIScroll($elemMenuScrollWrapper, currentTabIndex);
 
   // 메뉴 클릭시 가운데로 이동
   useEffect(() => {
-    if (iScroll) {
-      iScroll.scrollTo(
-        translateX,
-        0,
-        600,
-        (IScroll as any).utils.ease.circular
+    if (iScroll && $elemMenuScrollWrapper.current) {
+      const startX = scrollMoveTo(
+        $elemMenuScrollWrapper.current,
+        currentTabIndex
       );
+      iScroll.scrollTo(startX, 0, 600, (IScroll as any).utils.ease.circular);
     }
-  }, [translateX, iScroll]);
+  }, [currentTabIndex, iScroll]);
 
   return (
-    <HorizontalScrollThumbMenuStyled id="menuWrapper">
-      <MenuListStyled width={menuListWidth}>
-        {tabList.map(menu => (
-          <MenuItemStyled key={menu.id}>
-            <RouteLink
-              to={menu.id}
-              css={css`
-                padding: 0 5px;
-              `}
-            >
-              <ThumbMenuItem menu={menu}></ThumbMenuItem>
-            </RouteLink>
-          </MenuItemStyled>
-        ))}
-      </MenuListStyled>
-      <Button
-        css={css`
-          position: absolute;
-          top: 0;
-          bottom: 16px;
-          right: 10px;
-          width: 34px;
-          z-index: 10;
-        `}
-        onClick={onMenuToggle}
+    <HorizontalScrollThumbMenuStyled>
+      <HorizontalScrollThumbMenuInnerStyled
+        id="menuWrapper"
+        ref={$elemMenuScrollWrapper}
       >
-        <FontAwesomeIcon icon={faChevronDown}></FontAwesomeIcon>
-      </Button>
+        <MenuListStyled width={menuListWidth}>
+          {tabList.map(menu => (
+            <MenuItemStyled key={menu.id}>
+              <RouteLink
+                to={menu.id}
+                css={css`
+                  padding: 0 5px;
+                `}
+              >
+                <ThumbMenuItem menu={menu}></ThumbMenuItem>
+              </RouteLink>
+            </MenuItemStyled>
+          ))}
+        </MenuListStyled>
+        <Button
+          css={css`
+            position: absolute;
+            top: 0;
+            bottom: 16px;
+            right: 10px;
+            width: 34px;
+            z-index: 10;
+          `}
+          onClick={onMenuToggle}
+        >
+          <FontAwesomeIcon icon={faChevronDown}></FontAwesomeIcon>
+        </Button>
+      </HorizontalScrollThumbMenuInnerStyled>
     </HorizontalScrollThumbMenuStyled>
   );
 }

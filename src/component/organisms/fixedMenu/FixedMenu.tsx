@@ -46,18 +46,19 @@ const FixedMeunItemStyled = styled.li`
 
 function FixedMenu({ menuData }: FixedMenuProps) {
   const $elemFixedMenu = useRef<HTMLDivElement>(null);
-  const { tabList } = menuData;
+  const $elemFixedMenuWrapper = useRef<HTMLDivElement>(null);
+  const { tabList, currentTabIndex } = menuData;
 
   useEffect(() => {
     if ($elemFixedMenu.current) {
       $elemFixedMenu.current.style.top = `0px`;
     }
   }, []);
-  useIScroll("#fixedMenuWrapper");
+  useIScroll($elemFixedMenuWrapper, currentTabIndex);
 
   return (
     <FixedMenuStyled ref={$elemFixedMenu}>
-      <FixedMenuInnerStyled id="fixedMenuWrapper">
+      <FixedMenuInnerStyled id="fixedMenuWrapper" ref={$elemFixedMenuWrapper}>
         <FixedMenuListStyled>
           {tabList.map(menu => (
             <FixedMeunItemStyled key={menu.id}>
@@ -65,7 +66,7 @@ function FixedMenu({ menuData }: FixedMenuProps) {
                 to={menu.id}
                 css={css`
                   position: relative;
-                  padding: 10px 8px;
+                  padding: 15px 8px;
                 `}
               >
                 <Box

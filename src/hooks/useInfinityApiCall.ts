@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import axios, { CancelToken } from "axios";
-// import { useHistoryDispatch, IHistoryItem } from "contexts/HistoryContext";
 import { useHistoryStore } from "contexts/HistoryContext";
 
 import { IFakeResponseItem, InfinityFetch } from "types/api";
@@ -29,17 +28,19 @@ const loadData = async (
     });
 
     // console.log("response", response);
-    setPList(beforePList => {
-      if (!beforePList) {
-        beforePList = [];
-      }
-      return beforePList.concat(response);
-    });
+    if (response) {
+      setPList(beforePList => {
+        if (!beforePList) {
+          beforePList = [];
+        }
+        return beforePList.concat(response);
+      });
+      return true;
+    }
+    return false;
   } catch (error) {
     throw new Error(error);
   }
-
-  return true;
 };
 
 function useInfinityApiCall({
@@ -99,20 +100,27 @@ function useInfinityApiCall({
       itemsCount.current,
       setPList,
       source.token
-    ).then(isApiCall => {
-      setLoading(false);
-      if (historyStore.currentHistory) {
-        window.scrollTo(0, historyStore.currentHistory.scrollTop);
-      }
-    });
+    )
+      .then(isApiCall => {
+        // console.log("isApiCall", isApiCall);
+        if (isApiCall) {
+          setLoading(false);
+          if (historyStore.currentHistory) {
+            window.scrollTo(0, historyStore.currentHistory.scrollTop);
+          }
+        }
+      })
+      .catch(e => {
+        throw new Error("loadData 네트워크 오류 입니다.");
+      });
 
     window.addEventListener("scroll", infiniteScroll);
 
-    // unmount 되면서 렌더, dispatch 되면서 렌더.. 2번 렌더..
+    // unmount
     return () => {
       // console.log(`unmount ${pageName}`);
-      source.cancel();
       window.removeEventListener("scroll", infiniteScroll);
+      source.cancel();
       historyStore.pushHistory({
         preItemsCount: itemsCount.current,
         scrollTop: Math.max(
@@ -121,18 +129,6 @@ function useInfinityApiCall({
         ),
         pageName
       });
-      // unmount 시 히스토리 기록 dispatch 실행시 히스토리가 계속 늘어난다. Root에서 참조중..Root 계속 렌더..
-      // historyDispatch({
-      //   type: "PUSH",
-      //   historyItem: {
-      //     preItemsCount: itemsCount.current,
-      //     scrollTop: Math.max(
-      //       document.documentElement.scrollTop,
-      //       document.body.scrollTop
-      //     ),
-      //     pageName
-      //   }
-      // });
     };
   }, [apiFetch, infiniteScroll, isEmptyArray, historyStore, pageName]);
 

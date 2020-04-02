@@ -10,7 +10,8 @@ import Box from "component/atoms/box/Box";
 type MenuProps = {} & RouteComponentProps;
 
 function Menu({ location }: MenuProps) {
-  const tabData = useTab();
+  const pathName = location.pathname.substring(1);
+  const tabData = useTab(pathName);
 
   // 메뉴 접었다 펼치기
   const [menuFold, setMenuFold] = useState(true);
@@ -20,7 +21,7 @@ function Menu({ location }: MenuProps) {
 
   // 메뉴 활성화
   const { onHandleTabActive } = tabData;
-  const pathName = location.pathname.substring(1);
+  // const pathName = location.pathname.substring(1);
   useEffect(() => {
     onHandleTabActive(pathName);
     setMenuFold(true);
