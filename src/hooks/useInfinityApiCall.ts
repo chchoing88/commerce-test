@@ -27,7 +27,8 @@ const loadData = async (
       preItemsCount: preItemsCount,
       itemsCount: itemsCount
     });
-
+    // console.log("preItemsCount", preItemsCount);
+    // console.log("itemsCount", itemsCount);
     // console.log("response", response);
     if (response) {
       setPList(beforePList => {
@@ -57,8 +58,11 @@ function useInfinityApiCall({
   const preItemsCount = useRef(0);
   const itemsCount = useRef(30);
   const requestIng = useRef(false);
-
-  if (historyStore.currentHistory) {
+  // console.log("historyStore", historyStore);
+  if (
+    historyStore.currentHistory &&
+    historyStore.currentHistory.pageName === pageName
+  ) {
     itemsCount.current = historyStore.currentHistory.preItemsCount;
   }
 
