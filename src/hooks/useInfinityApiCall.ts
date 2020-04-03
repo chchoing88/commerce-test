@@ -51,19 +51,30 @@ function useInfinityApiCall({
   isEmptyArray = false
 }: useInfinityApiCallProps) {
   const historyStore = useHistoryStore();
-  // console.log("historyStore", historyStore.historyList);
+  console.log("historyStore", historyStore.historyList);
 
   const [isLoading, setLoading] = useState(false);
   const [pList, setPList] = useState<IFakeResponseItem[] | null>(null);
   const preItemsCount = useRef(0);
   const itemsCount = useRef(30);
   const requestIng = useRef(false);
-  // console.log("historyStore", historyStore);
-  if (
-    historyStore.currentHistory &&
-    historyStore.currentHistory.pageName === pageName
-  ) {
-    itemsCount.current = historyStore.currentHistory.preItemsCount;
+
+  // Todo: 전 것만 확인하고 있는데 페이지의 각 마지막 히스토리를 가져오려면...
+  // historyStore 의 currentHistory가 아닌 historyStore의 historyList 중에
+  // 지금 현재 페이지와 일치하는 가장 마지막 것을 가져와서 적용한다.
+  // 그러면 사실 currentHistory 라는게 있을 필요가 없을 듯 싶다.
+  // if (
+  //   historyStore.currentHistory &&
+  //   historyStore.currentHistory.pageName === pageName
+  // ) {
+  //   itemsCount.current = historyStore.currentHistory.preItemsCount;
+  // }
+
+  if (historyStore.isMatchPageNameHistory(pageName)) {
+    const history = historyStore.getRecentPageHistory(pageName);
+    if (history) {
+      itemsCount.current = history.preItemsCount;
+    }
   }
 
   // 무한 스크롤
@@ -128,11 +139,19 @@ function useInfinityApiCall({
       source.token
     )
       .then(isApiCall => {
-        // console.log("isApiCall", isApiCall);
         if (isApiCall) {
           setLoading(false);
-          if (historyStore.currentHistory) {
-            window.scrollTo(0, historyStore.currentHistory.scrollTop);
+          // if (
+          //   historyStore.currentHistory &&
+          //   historyStore.currentHistory.pageName === pageName
+          // ) {
+          //   window.scrollTo(0, historyStore.currentHistory.scrollTop);
+          // }
+          if (historyStore.isMatchPageNameHistory(pageName)) {
+            const history = historyStore.getRecentPageHistory(pageName);
+            if (history) {
+              window.scrollTo(0, history.scrollTop);
+            }
           }
         }
       })
