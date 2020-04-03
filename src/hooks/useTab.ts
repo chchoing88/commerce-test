@@ -76,7 +76,7 @@ function useTab(pathName: string): ITabHook {
   // 탭 눌렀을때
   const onHandleTabActive = useCallback(
     (tabId: string) => {
-      if (tabId && currentTabData && currentTabData.id !== tabId) {
+      if (tabId && (!currentTabData || currentTabData.id !== tabId)) {
         setTabList(beforeTabList => {
           return beforeTabList.map(tabItem => {
             tabItem.isActive = tabItem.id === tabId;

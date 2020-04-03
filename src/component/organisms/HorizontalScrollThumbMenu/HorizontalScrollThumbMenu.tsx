@@ -70,6 +70,7 @@ function HorizontalScrollThumbMenu({
 
   const iScroll = useIScroll($elemMenuScrollWrapper, currentTabIndex);
 
+  // console.log("currentTabIndex", currentTabIndex);
   // 메뉴 클릭시 가운데로 이동
   useEffect(() => {
     if (iScroll && $elemMenuScrollWrapper.current) {
@@ -77,6 +78,7 @@ function HorizontalScrollThumbMenu({
         $elemMenuScrollWrapper.current,
         currentTabIndex
       );
+      // console.log("startX", startX);
       iScroll.scrollTo(startX, 0, 600, (IScroll as any).utils.ease.circular);
     }
   }, [currentTabIndex, iScroll]);

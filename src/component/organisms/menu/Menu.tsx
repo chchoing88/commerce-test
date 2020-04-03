@@ -22,6 +22,7 @@ function Menu({ location }: MenuProps) {
   // 메뉴 활성화
   const { onHandleTabActive } = tabData;
   // const pathName = location.pathname.substring(1);
+  // console.log("pathName", pathName);
   useEffect(() => {
     onHandleTabActive(pathName);
     setMenuFold(true);
